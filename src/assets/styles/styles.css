@@ -1,0 +1,15 @@
+html {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+main {
+    position: relative;
+    padding-top: 60px;
+}
+
+.app-title {
+    line-height:50px;
+    font-size:20px;
+    color: white;
+}

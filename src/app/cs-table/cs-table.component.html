@@ -1,0 +1,32 @@
+<div *ngIf="alertsMessages.length > 0">
+    <app-cs-alert [messages]="alertsMessages" (closeAlert)="alertClosed()"></app-cs-alert>
+</div>
+<table class="table table-hover cs-table">
+    <thead>
+    <tr>
+        <th>
+            <input type="checkbox" id="select-all" (change)="CheckAllOptions()">
+        </th>
+        <th>
+            <label *ngIf="checkedNumber" class="selected-label">Selected {{getRowsSelectedCount()}}</label>
+            <label *ngIf="!checkedNumber" class="selected-label">None Selected</label>
+        </th>
+        <th colspan="3">
+            <button class="download-btn" (click)="downloadSelected()" [disabled]="!enableDownload"><i class="fa fa-download download"></i>Download Selected</button>
+        </th>
+    </tr>
+    <tr>
+        <th></th>
+        <th scope="col" *ngFor="let column of columnData">{{column | titlecase}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let row of tableData" [ngClass]="{'checked': row.checked}">
+        <th scope="row"><input type="checkbox" [(ngModel)]="row.checked" (change)="getRowsSelectedCount()"></th>
+        <td class="row-name">{{row.name}}</td>
+        <td>{{row.device}}</td>
+        <td>{{row.path}}</td>
+        <td [ngClass]="{'status': row.status === 'available'}">{{row.status | titlecase}}</td>
+    </tr>
+    </tbody>
+</table>
