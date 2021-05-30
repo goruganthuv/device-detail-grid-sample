@@ -20,3 +20,4 @@ What is in the project:
 1. Run `npm install` to install app dependencies
 
 1. Run `ng serve -o` to start the server and launch the app
+2. Run `ng test` to run tests
