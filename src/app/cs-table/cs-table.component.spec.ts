@@ -1,6 +1,8 @@
-import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
 import {CsTableComponent} from './cs-table.component';
-import {expect} from '@angular/platform-browser/testing/src/matchers';
+import {CsAlertComponent} from '../cs-alert/cs-alert.component';
+import {FormsModule} from '@angular/forms';
+import {DataService} from '../shared/data.service';
 
 
 describe('CsTableComponent', () => {
@@ -48,7 +50,11 @@ describe('CsTableComponent', () => {
 
     beforeEach((() => {
         TestBed.configureTestingModule({
-            declarations: [ CsTableComponent ]
+            imports: [FormsModule],
+            declarations: [ CsTableComponent, CsAlertComponent ],
+            providers: [
+                {provide: DataService}
+            ]
         })
             .compileComponents();
     }));
@@ -59,6 +65,9 @@ describe('CsTableComponent', () => {
         component.tableData = testdata;
         fixture.detectChanges();
         rendererElement = fixture.nativeElement;
+        spyOn(component, 'CheckAllOptions').and.callThrough();
+        spyOn(component, 'getRowsSelectedCount').and.callThrough();
+        spyOn(component, 'enableDownloadSelected').and.callThrough();
     });
 
     afterEach(() => {
@@ -70,9 +79,9 @@ describe('CsTableComponent', () => {
     it('should show table data', fakeAsync(() => {
         component.ngOnInit();
         expect(component.tableData).toEqual(testdata);
-        const containersElement = rendererElement.querySelector('app-cs-table');
+        const containersElement = rendererElement.querySelectorAll('app-cs-table');
         expect(component.tableData.length).toEqual(testdata.length);
-        expect(containersElement).toBeTruthy();
+        expect(containersElement).not.toBe(null);
     }));
     it('should clear alert messages on close', fakeAsync(() => {
      component.alertClosed();
@@ -82,17 +91,20 @@ describe('CsTableComponent', () => {
         const elem = fixture.debugElement.nativeElement.querySelector('#select-all');
         // by default it should be unselected
         expect(elem.checked).toBeFalsy();
-        elem.change(); // click select all button
-        expect(elem.checked).toBe(true);
+        elem.click(); // click select all button
+        fixture.detectChanges();
+        expect(elem.checked).toBeTruthy();
         expect(component.CheckAllOptions).toHaveBeenCalled();
         expect(component.getRowsSelectedCount).toHaveBeenCalled();
         expect(component.checkedNumber).toEqual(testdata.length);
         expect(component.enableDownloadSelected).toHaveBeenCalled();
-        expect(component.enableDownload).toBeFalse();
+        expect(component.enableDownload).toBeFalsy();
 
-        elem.change(); // click unselect all button
+        elem.click(); // click unselect all button
+        fixture.detectChanges();
+        expect(elem.checked).toBe(false);
         expect(component.checkedNumber).toEqual(0);
         expect(component.selectedRows.length).toEqual(0);
-        expect(component.enableDownload).toBeFalse();
+        expect(component.enableDownload).toBeFalsy();
     }));
 });

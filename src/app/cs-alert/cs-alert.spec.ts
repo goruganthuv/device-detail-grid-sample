@@ -1,7 +1,5 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {afterEach, beforeEach, describe, it} from '@angular/core/testing/src/testing_internal';
 import {CsAlertComponent} from './cs-alert.component';
-import {expect} from '@angular/platform-browser/testing/src/matchers';
 
 
 describe('CsAlertComponent', () => {
